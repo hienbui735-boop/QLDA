@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thanh Toán Đơn Hàng - FreshDrink</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+  <!-- HEADER -->
+  <header class="bg-emerald-800 text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+      <a href="index.html" class="flex items-center gap-2 group">
+        <div class="w-10 h-10 bg-yellow-400 text-emerald-950 rounded-full flex items-center justify-center font-black shadow">🥤</div>
+        <span class="text-xl font-black tracking-widest text-yellow-400">FRESHDRINK</span>
+      </a>
+      <span class="text-sm font-bold bg-emerald-900 px-4 py-1.5 rounded-full text-emerald-200">🔒 Thanh Toán An Toàn</span>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-10">
+    <h1 class="text-2xl md:text-3xl font-black text-center text-gray-900 mb-8 uppercase">XÁC NHẬN & THANH TOÁN ĐƠN HÀNG</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      
+      <!-- CỘT 1: THÔNG TIN CHUYỂN KHOẢN QR -->
+      <div id="qr-payment-section" class="bg-white rounded-3xl p-6 shadow-md border border-gray-100 text-center">
+        <span class="bg-emerald-100 text-emerald-800 text-xs font-black px-3 py-1 rounded-full uppercase">Thanh Toán Chuyển Khoản VietQR</span>
+        <h2 class="text-lg font-bold text-gray-800 mt-3 mb-4">Quét mã QR để thanh toán</h2>
+
+        <div class="bg-gray-50 p-4 rounded-2xl border border-dashed border-gray-300 inline-block mb-4 shadow-inner">
+          <img id="qr-code-img" src="" alt="Mã QR Thanh Toán" class="w-56 h-56 mx-auto object-contain rounded-xl">
+        </div>
+
+        <div class="space-y-2 text-left bg-emerald-50/60 p-4 rounded-2xl text-xs border border-emerald-100 mb-6">
+          <div class="flex justify-between">
+            <span class="text-gray-500">Ngân hàng:</span>
+            <strong class="text-gray-800">MBBANK (Ngân hàng Quân Đội)</strong>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Số tài khoản:</span>
+            <strong class="text-emerald-700 text-sm font-black">0987654321</strong>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Chủ tài khoản:</span>
+            <strong class="text-gray-800 uppercase">CÔNG TY FRESHDRINK VIETNAM</strong>
+          </div>
+          <div class="flex justify-between border-t pt-2 mt-2">
+            <span class="text-gray-500">Số tiền:</span>
+            <strong id="payment-amount" class="text-red-600 text-base font-black">0 VNĐ</strong>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Nội dung CK:</span>
+            <strong id="payment-memo" class="text-gray-900 font-bold bg-yellow-200 px-2 py-0.5 rounded">FD12345</strong>
+          </div>
+        </div>
+
+        <button onclick="finishOrder()" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-black text-sm py-3.5 rounded-2xl shadow-lg transition">
+          ✅ Tôi Đã Chuyển Khoản Hoàn Tất
+        </button>
+      </div>
+
+      <!-- CỘT 2: TÓM TẮT ĐƠN HÀNG -->
+      <div class="space-y-6">
+        <div class="bg-white rounded-3xl p-6 shadow-md border border-gray-100">
+          <h3 class="font-black text-base text-gray-900 mb-4 uppercase flex items-center gap-2">
+            📍 Thông Tin Nhận Hàng
+          </h3>
+          <div class="space-y-2 text-xs text-gray-600">
+            <p><span class="text-gray-400">Người nhận:</span> <strong id="cust-name" class="text-gray-800 text-sm">Chưa cập nhật</strong></p>
+            <p><span class="text-gray-400">Số điện thoại:</span> <strong id="cust-phone" class="text-gray-800 text-sm">Chưa cập nhật</strong></p>
+            <p><span class="text-gray-400">Địa chỉ giao:</span> <strong id="cust-address" class="text-gray-800 text-sm">Chưa cập nhật</strong></p>
+            <p><span class="text-gray-400">Hình thức thanh toán:</span> <strong id="cust-method" class="text-emerald-700 font-bold uppercase">Chuyển khoản</strong></p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-3xl p-6 shadow-md border border-gray-100">
+          <h3 class="font-black text-base text-gray-900 mb-4 uppercase">
+            📦 Sản Phẩm Trong Đơn
+          </h3>
+          <div id="order-summary-items" class="space-y-3 max-h-60 overflow-y-auto pr-1 divide-y"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    // Kiểm tra đặng nhập trước khi xem trang thanh toán
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (!currentUser) {
+      alert('Vui lòng đăng nhập để thực hiện thanh toán!');
+      window.location.href = 'login.html';
+    }
+
+    const pendingOrder = JSON.parse(localStorage.getItem('pendingOrder'));
+
+    if (!pendingOrder) {
+      alert('Không tìm thấy thông tin đơn hàng!');
+      window.location.href = 'index.html';
+    } else {
+      document.getElementById('cust-name').innerText = pendingOrder.customer.name || currentUser.name || 'Khách hàng';
+      document.getElementById('cust-phone').innerText = pendingOrder.customer.phone || 'Chưa cung cấp';
+      document.getElementById('cust-address').innerText = pendingOrder.customer.address || 'Tại cửa hàng';
+      document.getElementById('cust-method').innerText = pendingOrder.paymentMethod === 'cod' ? 'Thanh toán khi nhận hàng (COD)' : 'Chuyển khoản QR';
+
+      document.getElementById('payment-amount').innerText = pendingOrder.total.toLocaleString('vi-VN') + ' VNĐ';
+      
+      const orderCode = 'FD' + Math.floor(100000 + Math.random() * 900000);
+      document.getElementById('payment-memo').innerText = orderCode;
+
+      const bankId = 'MB';
+      const accountNo = '0987654321';
+      const amount = pendingOrder.total;
+      const qrUrl = `https://img.vietqr.io/image/${bankId}-${accountNo}-compact2.png?amount=${amount}&addInfo=${orderCode}&accountName=FRESHDRINK%20VIETNAM`;
+      document.getElementById('qr-code-img').src = qrUrl;
+
+      const summaryEl = document.getElementById('order-summary-items');
+      summaryEl.innerHTML = pendingOrder.items.map(item => `
+        <div class="pt-2 flex items-center justify-between text-xs">
+          <div class="flex items-center gap-3">
+            <img src="${item.image}" class="w-12 h-12 rounded-xl object-cover">
+            <div>
+              <p class="font-bold text-gray-800">${item.name}</p>
+              <p class="text-gray-400 text-[10px]">Size: ${item.size} x ${item.quantity}</p>
+            </div>
+          </div>
+          <span class="font-bold text-emerald-700">${(item.price * item.quantity).toLocaleString('vi-VN')} VNĐ</span>
+        </div>
+      `).join('');
+    }
+
+    function finishOrder() {
+      localStorage.removeItem('cart');
+      localStorage.removeItem('pendingOrder');
+      alert('Cảm ơn bạn đã đặt hàng! Đơn hàng của bạn đã được xác nhận.');
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>
