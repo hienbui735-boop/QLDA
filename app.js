@@ -1,12 +1,12 @@
 // 1. Danh sách sản phẩm mở rộng đa dạng
 let products = [
   { id: 1, name: 'Cà Phê Phin Sữa Đá', category: 'coffee', basePrice: 29000, image: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=400', desc: 'Cà phê phin truyền thống đậm đà hòa quyện cùng sữa đặc ngọt ngào.' },
-  { id: 2, name: 'Bạc Xỉu Tươi Mát', category: 'coffee', basePrice: 29000, image: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?w=400', desc: 'Vị cà phê nhẹ nhàng hòa cùng lớp sữa tươi béo ngậy sảng khoái.' },
+  { id: 2, name: 'Bạc Xỉu Tươi Mát', category: 'coffee', basePrice: 29000, sale: 10, image: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?w=400', desc: 'Vị cà phê nhẹ nhàng hòa cùng lớp sữa tươi béo ngậy sảng khoái.' },
   { id: 3, name: 'Cà Phê Đen Đá Phin', category: 'coffee', basePrice: 25000, image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400', desc: 'Cà phê nguyên chất dành cho người yêu thích hương vị nguyên bản.' },
   { id: 4, name: 'Trà Sen Vàng Thanh Mát', category: 'tea', basePrice: 45000, image: 'https://images.unsplash.com/photo-1556881286-fc6915169721?w=400', desc: 'Trà Oolong thanh nhẹ kết hợp hạt sen thơm bùi và củ năng giòn tan.' },
-  { id: 5, name: 'Trà Đào Cam Sả', category: 'tea', basePrice: 45000, image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=400', desc: 'Trà trái cây thơm nức cùng đào giòn ngọt và hương cam sả sảng khoái.' },
+  { id: 5, name: 'Trà Đào Cam Sả', category: 'tea', basePrice: 45000, sale: 10, image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=400', desc: 'Trà trái cây thơm nức cùng đào giòn ngọt và hương cam sả sảng khoái.' },
   { id: 6, name: 'Trà Thạch Vải', category: 'tea', basePrice: 42000, image: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400', desc: 'Sự kết hợp giữa vị trà đậm đà và những trái vải mọng nước.' },
-  { id: 7, name: 'Freeze Matcha Nhật Bản', category: 'freeze', basePrice: 55000, image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400', desc: 'Đá xay trà xanh Matcha béo ngậy kết hợp lớp kem tươi mịn màng.' },
+  { id: 7, name: 'Freeze Matcha Nhật Bản', category: 'freeze', basePrice: 55000, sale: 10, image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=400', desc: 'Đá xay trà xanh Matcha béo ngậy kết hợp lớp kem tươi mịn màng.' },
   { id: 8, name: 'Freeze Cà Phê Phin', category: 'freeze', basePrice: 55000, image: 'https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=400', desc: 'Đá xay cà phê phin đậm đà phủ kem tươi béo bùi khó cưỡng.' },
   { id: 9, name: 'Bánh Mỳ Que Pate', category: 'cake', basePrice: 19000, image: 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=400', desc: 'Bánh mỳ giòn tan với nhân pate béo ngậy đặc trưng.' },
   { id: 10, name: 'Bánh Mousse Cacao', category: 'cake', basePrice: 35000, image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400', desc: 'Bánh ngọt vị cacao mềm mịn thơm ngon hấp dẫn.' },
@@ -25,6 +25,29 @@ let discountRate = 0;
 
 function formatCurrency(amount) {
   return amount.toLocaleString('vi-VN') + ' VNĐ';
+}
+
+function getDiscountedPrice(price, sale = 0) {
+  return Math.round(price * (1 - sale / 100));
+}
+
+function getCartWithCurrentSales() {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const updatedCart = cart.map(item => {
+    const product = products.find(p => p.id === item.id);
+    const originalPrice = item.originalPrice ?? item.price;
+    const sale = product ? (product.sale || 0) : (item.sale || 0);
+
+    return {
+      ...item,
+      originalPrice,
+      sale,
+      price: getDiscountedPrice(originalPrice, sale)
+    };
+  });
+
+  localStorage.setItem('cart', JSON.stringify(updatedCart));
+  return updatedCart;
 }
 
 // 2. Render danh sách sản phẩm ở trang menu
@@ -49,6 +72,7 @@ function renderProducts(category = 'all', sortType = 'default') {
         <span class="absolute top-3 left-3 bg-emerald-800 text-yellow-300 text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow">
           ${p.category}
         </span>
+        ${p.sale ? `<span class="absolute top-3 right-3 bg-red-600 text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow">SALE ${p.sale}%</span>` : ''}
       </div>
       <div class="p-4 flex-1 flex flex-col justify-between">
         <div>
@@ -58,7 +82,12 @@ function renderProducts(category = 'all', sortType = 'default') {
         <div>
           <div class="flex items-center justify-between mb-3">
             <span class="text-xs text-gray-400">Giá chỉ từ</span>
-            <span class="text-emerald-700 font-black text-base">${formatCurrency(p.basePrice)}</span>
+            ${p.sale
+              ? `<span class="flex flex-col items-end leading-tight">
+                  <span class="text-xs text-gray-400 line-through">${formatCurrency(p.basePrice)}</span>
+                  <span class="text-emerald-700 font-black text-base">${formatCurrency(getDiscountedPrice(p.basePrice, p.sale))}</span>
+                </span>`
+              : `<span class="text-emerald-700 font-black text-base">${formatCurrency(p.basePrice)}</span>`}
           </div>
           <button onclick="openProductModal(${p.id})" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs py-2.5 rounded-xl shadow transition">
             Tùy Chọn & Đặt Hàng
@@ -123,6 +152,7 @@ function updateModalPrice() {
 
   if (sizeValue === 'M') price += 6000;
   if (sizeValue === 'L') price += 10000;
+  price = getDiscountedPrice(price, selectedProduct.sale || 0);
 
   const qtyInput = document.getElementById('product-qty');
   const qty = parseInt(qtyInput ? qtyInput.value : 1) || 1;
@@ -137,9 +167,11 @@ function addToCartFromModal() {
   const sizeRadio = document.querySelector('input[name="size"]:checked');
   const size = sizeRadio ? sizeRadio.value : 'S';
 
-  let unitPrice = selectedProduct.basePrice;
-  if (size === 'M') unitPrice += 6000;
-  if (size === 'L') unitPrice += 10000;
+  let originalUnitPrice = selectedProduct.basePrice;
+  if (size === 'M') originalUnitPrice += 6000;
+  if (size === 'L') originalUnitPrice += 10000;
+  const sale = selectedProduct.sale || 0;
+  const unitPrice = getDiscountedPrice(originalUnitPrice, sale);
 
   const qtyInput = document.getElementById('product-qty');
   const qty = parseInt(qtyInput ? qtyInput.value : 1) || 1;
@@ -150,6 +182,8 @@ function addToCartFromModal() {
     name: selectedProduct.name,
     image: selectedProduct.image,
     size: size,
+    originalPrice: originalUnitPrice,
+    sale: sale,
     price: unitPrice,
     quantity: qty
   };
@@ -169,22 +203,26 @@ function renderCart() {
   const cartSubtotalEl = document.getElementById('cart-subtotal');
   const cartDiscountEl = document.getElementById('cart-discount');
   const cartTotalEl = document.getElementById('cart-total');
-  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const cart = getCartWithCurrentSales();
 
   if (!cartItemsEl) return;
 
   if (cart.length === 0) {
     cartItemsEl.innerHTML = '<p class="text-center py-8 text-gray-500 font-medium">Giỏ hàng của bạn đang trống.</p>';
     if (cartSubtotalEl) cartSubtotalEl.innerText = '0 VNĐ';
+    const cartSaleDiscountEl = document.getElementById('cart-sale-discount');
+    if (cartSaleDiscountEl) cartSaleDiscountEl.innerText = '0 VNĐ';
     if (cartDiscountEl) cartDiscountEl.innerText = '0 VNĐ';
     if (cartTotalEl) cartTotalEl.innerText = '0 VNĐ';
     return;
   }
 
   let subtotal = 0;
+  let saleDiscount = 0;
   cartItemsEl.innerHTML = cart.map((item, index) => {
     const itemTotal = item.price * item.quantity;
-    subtotal += itemTotal;
+    subtotal += item.originalPrice * item.quantity;
+    saleDiscount += (item.originalPrice - item.price) * item.quantity;
 
     return `
       <div class="flex items-center justify-between py-4 border-b">
@@ -193,7 +231,10 @@ function renderCart() {
           <div>
             <h4 class="font-bold text-base text-gray-800">${item.name}</h4>
             <p class="text-xs text-gray-500">Size: <strong class="text-gray-700">${item.size}</strong></p>
-            <p class="text-xs text-emerald-700 font-bold mt-0.5">${formatCurrency(item.price)}</p>
+            ${item.sale
+              ? `<p class="text-xs text-gray-400 line-through mt-0.5">${formatCurrency(item.originalPrice)}</p>
+                 <p class="text-xs text-emerald-700 font-bold">${formatCurrency(item.price)} <span class="text-red-600">(-${item.sale}%)</span></p>`
+              : `<p class="text-xs text-emerald-700 font-bold mt-0.5">${formatCurrency(item.price)}</p>`}
           </div>
         </div>
         <div class="flex items-center gap-4 text-xs">
@@ -205,10 +246,13 @@ function renderCart() {
     `;
   }).join('');
 
-  const discountAmount = subtotal * discountRate;
+  const discountedSubtotal = subtotal - saleDiscount;
+  const discountAmount = discountedSubtotal * discountRate;
   if (cartSubtotalEl) cartSubtotalEl.innerText = formatCurrency(subtotal);
+  const cartSaleDiscountEl = document.getElementById('cart-sale-discount');
+  if (cartSaleDiscountEl) cartSaleDiscountEl.innerText = '-' + formatCurrency(saleDiscount);
   if (cartDiscountEl) cartDiscountEl.innerText = '-' + formatCurrency(discountAmount);
-  if (cartTotalEl) cartTotalEl.innerText = formatCurrency(subtotal - discountAmount);
+  if (cartTotalEl) cartTotalEl.innerText = formatCurrency(discountedSubtotal - discountAmount);
 }
 
 function removeFromCart(index) {
@@ -252,7 +296,7 @@ function handleCheckout(e) {
     return;
   }
   
-  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const cart = getCartWithCurrentSales();
   if (cart.length === 0) {
     alert('Giỏ hàng của bạn đang trống!');
     return;
@@ -263,9 +307,11 @@ function handleCheckout(e) {
   const addressInput = document.querySelector('input[placeholder="Nhập địa chỉ giao hàng chi tiết"]');
   const paymentSelect = document.querySelector('select');
 
-  const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const discountAmount = subtotal * discountRate;
-  const total = subtotal - discountAmount;
+  const subtotal = cart.reduce((sum, item) => sum + (item.originalPrice * item.quantity), 0);
+  const saleDiscount = cart.reduce((sum, item) => sum + ((item.originalPrice - item.price) * item.quantity), 0);
+  const discountedSubtotal = subtotal - saleDiscount;
+  const discountAmount = discountedSubtotal * discountRate;
+  const total = discountedSubtotal - discountAmount;
 
   const pendingOrder = {
     customer: {
@@ -276,6 +322,7 @@ function handleCheckout(e) {
     paymentMethod: paymentSelect ? paymentSelect.value : 'qr',
     items: cart,
     subtotal: subtotal,
+    saleDiscount: saleDiscount,
     discount: discountAmount,
     total: total
   };
