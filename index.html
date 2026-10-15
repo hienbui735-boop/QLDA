@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreshDrink - Thương Hiệu Trà & Cà Phê Hàng Đầu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-stone-50 text-gray-800 font-sans">
+
+  <!-- 1. HEADER CHUẨN ĐỐI XỨNG PHONG CÁCH HIGHLANDS -->
+  <header class="bg-emerald-800 text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+      
+      <!-- Menu Bên Trái -->
+      <nav class="hidden md:flex items-center space-x-6 font-extrabold text-sm tracking-wider">
+        <a href="index.html" class="hover:text-yellow-400 transition">TRANG CHỦ</a>
+        <a href="menu.html" class="hover:text-yellow-400 transition">THỰC ĐƠN</a>
+        <a href="about.html" class="hover:text-yellow-400 transition">VỀ FRESHDRINK</a>
+        <a href="support.html" class="hover:text-yellow-400 transition">HỖ TRỢ</a>
+      </nav>
+
+      <!-- Logo Tròn Chính Giữa -->
+      <div class="flex justify-center">
+        <a href="index.html" class="flex flex-col items-center group">
+          <div class="w-12 h-12 bg-gradient-to-br from-yellow-300 to-yellow-500 text-emerald-950 rounded-full flex items-center justify-center shadow-lg border-2 border-white/30 transform group-hover:scale-105 transition">
+            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+              <path d="M2,21V19H20V21H2M20,8V5H18V8H20M20,3A2,2 0 0,1 22,5V8A2,2 0 0,1 20,10H18V13A4,4 0 0,1 14,17H8A4,4 0 0,1 4,13V3H20M16,5H6V13A2,2 0 0,0 8,15H14A2,2 0 0,0 16,13V5Z"/>
+            </svg>
+          </div>
+          <span class="text-[10px] font-black tracking-widest text-yellow-400 mt-1 uppercase">FRESHDRINK</span>
+        </a>
+      </div>
+
+      <!-- Menu Bên Phải: Đăng nhập & Giỏ hàng -->
+      <div class="flex items-center space-x-4 font-extrabold text-sm tracking-wider">
+        <div id="user-menu"></div>
+        <a href="cart.html" class="bg-yellow-400 text-emerald-950 px-4 py-2 rounded-full hover:bg-yellow-300 shadow-md transition flex items-center gap-1.5 font-black text-xs">
+          <span>🛒 GIỎ HÀNG</span>
+          <span id="cart-count" class="bg-red-600 text-white text-[10px] px-1.5 py-0.5 rounded-full">0</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- 2. BANNER NGHỆ THUẬT SẢN PHẨM MỚI (PHONG CÁCH 2LAND / HIGHLANDS) -->
+  <section class="relative bg-gradient-to-r from-amber-100 via-orange-100 to-amber-50 py-16 md:py-24 overflow-hidden border-b border-orange-200">
+    <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+      <div class="z-10 space-y-4 text-center md:text-left">
+        <span class="bg-red-600 text-white text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-wider">Bộ Sưu Tập Mới</span>
+        <h1 class="text-4xl md:text-6xl font-black text-stone-900 leading-tight">Sen Bùi, Kem Mịn</h1>
+        <p class="text-stone-700 text-base md:text-lg leading-relaxed">
+          Trải nghiệm hương vị độc đáo hòa quyện giữa Trà Sen Vàng Củ Năng giòn tan và Trà Sen Vàng Cốm Non thơm bùi béo ngậy.
+        </p>
+        <div class="pt-4">
+          <a href="menu.html" class="inline-block bg-emerald-700 text-white font-black text-sm px-8 py-4 rounded-full hover:bg-emerald-800 shadow-xl transition transform hover:scale-105">
+            Thưởng Thức Ngay
+          </a>
+        </div>
+      </div>
+      <div class="flex justify-center relative">
+        <div class="w-full max-w-md bg-gradient-to-tr from-amber-200 to-orange-200 rounded-3xl p-6 shadow-2xl transform rotate-1 hover:rotate-0 transition duration-500">
+          <img src="https://images.unsplash.com/photo-1556881286-fc6915169721?w=800" class="rounded-2xl w-full h-80 object-cover shadow-md" alt="Trà Sen Vàng">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. KHỐI APP THÀNH VIÊN (HIGHLANDS ĐI / FRESHDRINK DI) -->
+  <section class="max-w-7xl mx-auto px-4 py-16">
+    <div class="bg-gradient-to-r from-red-600 to-red-700 rounded-3xl text-white overflow-hidden shadow-2xl grid grid-cols-1 md:grid-cols-2 items-center">
+      <div class="p-8 md:p-12 space-y-4">
+        <span class="bg-yellow-400 text-red-950 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">App Thành Viên</span>
+        <h2 class="text-3xl md:text-5xl font-black uppercase tracking-tight">Chào bạn mới! Miễn phí nước ngon</h2>
+        <p class="text-red-100 text-sm md:text-base leading-relaxed">
+          Tích đủ 9 điểm, nhận ngay ly thứ 10 miễn phí. Đặt trước - Lấy ngay, không cần đợi chờ tại cửa hàng.
+        </p>
+        <div class="pt-2">
+          <button onclick="alert('Quét mã QR để tải App thành viên FreshDrink ngay!')" class="bg-white text-red-700 hover:bg-yellow-300 hover:text-red-950 font-black px-8 py-3.5 rounded-full shadow-lg transition">
+            TẢI APP NGAY
+          </button>
+        </div>
+      </div>
+      <div class="p-8 flex justify-center bg-black/10">
+        <div class="bg-white/10 p-6 rounded-3xl border border-white/20 text-center backdrop-blur-md">
+          <div class="w-40 h-40 bg-white p-3 rounded-2xl mx-auto shadow-xl flex items-center justify-center">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://freshdrink.vn" alt="QR App" class="w-full h-full object-contain">
+          </div>
+          <p class="text-xs font-bold text-white mt-3">Quét mã để tải ứng dụng</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. KHỐI ĐỒNG HÀNH CÙNG FRESHDRINK (3 ẢNH CHUYÊN NGHIỆP) -->
+  <section class="max-w-7xl mx-auto px-4 py-12">
+    <h2 class="text-2xl md:text-3xl font-black text-center text-stone-900 mb-10 uppercase">Đồng Hành Cùng FreshDrink</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Item 1 -->
+      <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 border border-stone-200 group flex flex-col justify-between">
+        <div class="h-64 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=600" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="Đặt hàng">
+        </div>
+        <div class="p-6 text-center">
+          <h3 class="font-black text-lg text-stone-800 mb-2">ĐẶT HÀNG NGAY</h3>
+          <a href="menu.html" class="text-emerald-700 font-bold text-sm hover:underline">Khám phá thực đơn →</a>
+        </div>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 border border-stone-200 group flex flex-col justify-between">
+        <div class="h-64 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="Nghề nghiệp">
+        </div>
+        <div class="p-6 text-center">
+          <h3 class="font-black text-lg text-stone-800 mb-2">CƠ HỘI NGHỀ NGHIỆP</h3>
+          <a href="about.html" class="text-emerald-700 font-bold text-sm hover:underline">Gia nhập đội ngũ →</a>
+        </div>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 border border-stone-200 group flex flex-col justify-between">
+        <div class="h-64 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=600" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="Tin tức">
+        </div>
+        <div class="p-6 text-center">
+          <h3 class="font-black text-lg text-stone-800 mb-2">TIN TỨC & SỰ KIỆN</h3>
+          <a href="#" class="text-emerald-700 font-bold text-sm hover:underline">Xem các hoạt động →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. KHỐI TÌM CỬA HÀNG GẦN BẠN -->
+  <section class="max-w-7xl mx-auto px-4 py-16">
+    <div class="bg-amber-50 border border-amber-200 rounded-3xl p-8 md:p-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center shadow-sm">
+      <div class="space-y-4">
+        <span class="text-emerald-700 font-bold text-xs uppercase tracking-wider">Hệ Thống Cửa Hàng</span>
+        <h2 class="text-3xl md:text-4xl font-black text-stone-900">Cửa Hàng FreshDrink Gần Bạn</h2>
+        <p class="text-stone-600 text-sm leading-relaxed">
+          Bạn ở đâu, có FreshDrink ở đó! Hơn 500 cửa hàng trên toàn quốc sẵn sàng phục vụ những ly nước tươi ngon nhất mỗi ngày.
+        </p>
+        <button onclick="alert('Tính năng định vị cửa hàng gần nhất đang được cập nhật!')" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-sm px-8 py-3.5 rounded-full shadow transition">
+          Khám Phá Ngay
+        </button>
+      </div>
+      <div>
+        <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800" class="rounded-2xl shadow-xl w-full h-72 object-cover" alt="Cửa hàng">
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. FOOTER CHUẨN THƯƠNG HIỆU -->
+  <footer class="bg-emerald-950 text-white pt-16 pb-10 border-t border-emerald-800">
+    <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-5 gap-8 mb-12">
+      <div class="md:col-span-2 space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 bg-gradient-to-br from-yellow-300 to-yellow-500 text-emerald-950 rounded-full flex items-center justify-center shadow-lg">
+            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+              <path d="M2,21V19H20V21H2M20,8V5H18V8H20M20,3A2,2 0 0,1 22,5V8A2,2 0 0,1 20,10H18V13A4,4 0 0,1 14,17H8A4,4 0 0,1 4,13V3H20M16,5H6V13A2,2 0 0,0 8,15H14A2,2 0 0,0 16,13V5Z"/>
+            </svg>
+          </div>
+          <span class="text-2xl font-black tracking-widest text-white">FRESHDRINK</span>
+        </div>
+        <p class="text-emerald-200 text-sm leading-relaxed pr-6">
+          Thương hiệu Trà & Cà Phê tươi mát hàng đầu. Mang lại nguồn năng lượng sảng khoái và trải nghiệm tuyệt vời nhất cho bạn mỗi ngày.
+        </p>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-sm uppercase tracking-wider mb-4 text-yellow-400">VỀ FRESHDRINK</h4>
+        <ul class="space-y-2.5 text-sm text-emerald-100">
+          <li><a href="about.html" class="hover:text-yellow-400 transition">Nguồn gốc & Chất lượng</a></li>
+          <li><a href="menu.html" class="hover:text-yellow-400 transition">Dịch vụ giao hàng</a></li>
+          <li><a href="support.html" class="hover:text-yellow-400 transition">Trung tâm hỗ trợ</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-sm uppercase tracking-wider mb-4 text-yellow-400">KHÁM PHÁ</h4>
+        <ul class="space-y-2.5 text-sm text-emerald-100">
+          <li><a href="menu.html" class="hover:text-yellow-400 transition">Tìm cửa hàng gần nhất</a></li>
+          <li><a href="#" class="hover:text-yellow-400 transition">Tin tức & Sự kiện</a></li>
+          <li><a href="#" class="hover:text-yellow-400 transition">Chính sách bảo mật</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-sm uppercase tracking-wider mb-4 text-yellow-400">THEO DÕI CHÚNG TÔI</h4>
+        <div class="flex space-x-3 mt-3">
+          <a href="#" class="w-10 h-10 bg-emerald-800 hover:bg-yellow-400 hover:text-emerald-950 rounded-full flex items-center justify-center transition text-lg font-bold">f</a>
+          <a href="#" class="w-10 h-10 bg-emerald-800 hover:bg-yellow-400 hover:text-emerald-950 rounded-full flex items-center justify-center transition text-lg font-bold">IG</a>
+          <a href="#" class="w-10 h-10 bg-emerald-800 hover:bg-yellow-400 hover:text-emerald-950 rounded-full flex items-center justify-center transition text-lg font-bold">YT</a>
+          <a href="#" class="w-10 h-10 bg-emerald-800 hover:bg-yellow-400 hover:text-emerald-950 rounded-full flex items-center justify-center transition text-lg font-bold">TT</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 border-t border-emerald-800 pt-6 text-center text-xs text-emerald-300">
+      <p>© 2026 FRESHDRINK VIETNAM. Tất cả các quyền được bảo lưu.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    renderHeader();
+  </script>
+</body>
+</html>

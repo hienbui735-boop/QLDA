@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản Trị Hệ Thống - Admin FreshDrink</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+
+  <!-- HEADER ADMIN -->
+  <header class="bg-emerald-950 text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-yellow-400 text-emerald-950 rounded-full flex items-center justify-center font-black shadow">⚙️</div>
+        <span class="text-xl font-black tracking-widest text-yellow-400">FRESHDRINK ADMIN</span>
+      </div>
+      <div class="flex items-center gap-4 text-xs font-bold">
+        <span class="bg-emerald-800 px-3 py-1.5 rounded-full text-yellow-300">👑 Quản trị viên hệ thống</span>
+        <a href="index.html" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl transition shadow">Thoát về Trang Chủ</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+    
+    <!-- 1. THỐNG KÊ TỔNG QUAN -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-200">
+        <p class="text-xs text-gray-400 font-bold uppercase">Tổng Doanh Thu (Hoàn thành)</p>
+        <h3 id="stat-revenue" class="text-2xl font-black text-emerald-700 mt-2">0 VNĐ</h3>
+      </div>
+      <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-200">
+        <p class="text-xs text-gray-400 font-bold uppercase">Tổng Đơn Hàng</p>
+        <h3 id="stat-orders" class="text-2xl font-black text-gray-900 mt-2">0</h3>
+      </div>
+      <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-200">
+        <p class="text-xs text-gray-400 font-bold uppercase">Sản Phẩm Trong Menu</p>
+        <h3 id="stat-products" class="text-2xl font-black text-gray-900 mt-2">0</h3>
+      </div>
+      <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-200">
+        <p class="text-xs text-gray-400 font-bold uppercase">Tài Khoản Thành Viên</p>
+        <h3 id="stat-users" class="text-2xl font-black text-gray-900 mt-2">0</h3>
+      </div>
+    </div>
+
+    <!-- 2. QUẢN LÝ ĐƠN HÀNG & KHÓA THAO TÁC KHI ĐÃ DUYỆT -->
+    <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-200">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-lg font-black uppercase text-gray-900">📦 Quản Lý, Duyệt & Hoàn Tất Đơn Hàng</h2>
+        <button onclick="clearAllOrders()" class="bg-red-100 hover:bg-red-200 text-red-700 font-bold text-xs px-4 py-2 rounded-xl transition">Xóa Tất Cả Đơn</button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="bg-gray-50 text-gray-500 border-b">
+              <th class="p-3">Mã đơn / Khách hàng</th>
+              <th class="p-3">Số điện thoại</th>
+              <th class="p-3">Địa chỉ giao</th>
+              <th class="p-3">Sản phẩm đặt</th>
+              <th class="p-3">Tổng tiền</th>
+              <th class="p-3">Trạng thái đơn</th>
+              <th class="p-3 text-center">Thao tác xử lý</th>
+            </tr>
+          </thead>
+          <tbody id="admin-orders-list" class="divide-y">
+            <!-- Đơn hàng sẽ render ở đây -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 3. QUẢN LÝ SẢN PHẨM -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-200 h-fit">
+        <h2 class="text-lg font-black uppercase text-gray-900 mb-4">➕ Thêm Sản Phẩm Mới</h2>
+        <form onsubmit="addNewProduct(event)" class="space-y-4 text-xs">
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Tên sản phẩm</label>
+            <input type="text" id="new-name" required placeholder="VD: Trà Xanh Sữa Mới" class="w-full border p-3 rounded-xl outline-none focus:border-emerald-700 font-medium">
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Danh mục</label>
+            <select id="new-category" class="w-full border p-3 rounded-xl outline-none font-bold bg-white">
+              <option value="coffee">Cà Phê</option>
+              <option value="tea">Trà</option>
+              <option value="freeze">Freeze Đá Xay</option>
+              <option value="cake">Bánh Ngọt</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Giá cơ bản (VNĐ)</label>
+            <input type="number" id="new-price" required placeholder="VD: 35000" class="w-full border p-3 rounded-xl outline-none focus:border-emerald-700 font-medium">
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Link hình ảnh (URL)</label>
+            <input type="url" id="new-image" required placeholder="https://images.unsplash.com/..." class="w-full border p-3 rounded-xl outline-none focus:border-emerald-700 font-medium">
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Mô tả chi tiết</label>
+            <textarea id="new-desc" rows="2" required placeholder="Mô tả hương vị..." class="w-full border p-3 rounded-xl outline-none focus:border-emerald-700 font-medium"></textarea>
+          </div>
+          <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-black py-3 rounded-xl shadow transition uppercase">
+            Thêm Vào Thực Đơn
+          </button>
+        </form>
+      </div>
+
+      <!-- DANH SÁCH SẢN PHẨM HIỆN TẠI -->
+      <div class="lg:col-span-2 bg-white rounded-3xl p-6 shadow-sm border border-gray-200">
+        <h2 class="text-lg font-black uppercase text-gray-900 mb-4">📋 Danh Sách Sản Phẩm Hiện Có</h2>
+        <div class="overflow-x-auto max-h-[500px] overflow-y-auto">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="bg-gray-50 text-gray-500 border-b">
+                <th class="p-3">Hình</th>
+                <th class="p-3">Tên sản phẩm</th>
+                <th class="p-3">Danh mục</th>
+                <th class="p-3">Giá cơ bản</th>
+                <th class="p-3 text-center">Xóa</th>
+              </tr>
+            </thead>
+            <tbody id="admin-products-list" class="divide-y">
+              <!-- Danh sách sản phẩm -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    // Kiểm tra bảo mật: Chỉ cho phép admin@gmail.com truy cập
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (!currentUser || currentUser.email !== 'admin@gmail.com') {
+      alert('Cảnh báo: Bạn không có quyền truy cập trang quản trị!');
+      window.location.href = 'login.html';
+    }
+
+    function renderAdminDashboard() {
+      let orders = JSON.parse(localStorage.getItem('adminOrders')) || [];
+      
+      // Chỉ tính doanh thu từ các đơn hàng đã ở trạng thái 'Hoàn thành'
+      const totalRevenue = orders
+        .filter(o => o.status === 'Hoàn thành')
+        .reduce((sum, o) => sum + o.total, 0);
+
+      document.getElementById('stat-revenue').innerText = totalRevenue.toLocaleString('vi-VN') + ' VNĐ';
+      document.getElementById('stat-orders').innerText = orders.length;
+      document.getElementById('stat-products').innerText = products.length;
+      
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      document.getElementById('stat-users').innerText = users.length;
+
+      // Render bảng đơn hàng
+      const ordersListEl = document.getElementById('admin-orders-list');
+      if (orders.length === 0) {
+        ordersListEl.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-gray-400">Chưa có đơn hàng nào được đặt.</td></tr>`;
+      } else {
+        ordersListEl.innerHTML = orders.map((o, idx) => {
+          let statusBadge = '';
+          let actionButtons = '';
+
+          if (!o.status || o.status === 'Chờ duyệt') {
+            // Đơn mới đặt: Hiện các nút duyệt/từ chối
+            statusBadge = '<span class="bg-yellow-100 text-yellow-800 px-2.5 py-1 rounded-full font-bold">Chờ duyệt</span>';
+            actionButtons = `
+              <button onclick="updateOrderStatus(${idx}, 'Đang giao')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-2 py-1 rounded shadow">Duyệt & Giao</button>
+              <button onclick="updateOrderStatus(${idx}, 'Đã từ chối')" class="bg-orange-500 hover:bg-orange-600 text-white font-bold px-2 py-1 rounded shadow">Từ chối</button>
+              <button onclick="deleteOrder(${idx})" class="bg-red-500 hover:bg-red-600 text-white font-bold px-2 py-1 rounded shadow">Xóa</button>
+            `;
+          } else if (o.status === 'Đang giao') {
+            // Đang giao: Cho phép bấm hoàn tất hoặc từ chối
+            statusBadge = '<span class="bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full font-bold">Đang giao hàng</span>';
+            actionButtons = `
+              <button onclick="updateOrderStatus(${idx}, 'Hoàn thành')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-2 py-1 rounded shadow">Hoàn tất</button>
+              <button onclick="deleteOrder(${idx})" class="bg-red-500 hover:bg-red-600 text-white font-bold px-2 py-1 rounded shadow">Xóa</button>
+            `;
+          } else if (o.status === 'Hoàn thành') {
+            // Đã hoàn thành: Khóa hoàn toàn, không cho sửa trạng thái nữa, chỉ cho phép xóa đơn nếu cần
+            statusBadge = '<span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-bold">Hoàn thành (Đã thanh toán)</span>';
+            actionButtons = `
+              <span class="text-gray-400 font-medium italic">Đã khóa</span>
+              <button onclick="deleteOrder(${idx})" class="bg-red-500 hover:bg-red-600 text-white font-bold px-2 py-1 rounded shadow ml-2">Xóa</button>
+            `;
+          } else if (o.status === 'Đã từ chối') {
+            // Đã từ chối: Khóa, chỉ cho phép xóa
+            statusBadge = '<span class="bg-red-100 text-red-800 px-2.5 py-1 rounded-full font-bold">Đã từ chối</span>';
+            actionButtons = `
+              <span class="text-gray-400 font-medium italic">Đã khóa</span>
+              <button onclick="deleteOrder(${idx})" class="bg-red-500 hover:bg-red-600 text-white font-bold px-2 py-1 rounded shadow ml-2">Xóa</button>
+            `;
+          }
+
+          return `
+            <tr class="hover:bg-gray-50">
+              <td class="p-3">
+                <strong class="text-emerald-700">#FD${1000 + idx}</strong><br>
+                <span class="font-bold text-gray-900">${o.customer.name}</span>
+              </td>
+              <td class="p-3">${o.customer.phone}</td>
+              <td class="p-3 max-w-xs truncate">${o.customer.address}</td>
+              <td class="p-3">
+                ${o.items.map(i => `<div class="text-[11px]">• ${i.name} (${i.size}) x${i.quantity}</div>`).join('')}
+              </td>
+              <td class="p-3 font-black text-red-600">${o.total.toLocaleString('vi-VN')} VNĐ</td>
+              <td class="p-3">${statusBadge}</td>
+              <td class="p-3 text-center">${actionButtons}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // Render bảng sản phẩm
+      const prodListEl = document.getElementById('admin-products-list');
+      prodListEl.innerHTML = products.map((p) => `
+        <tr class="hover:bg-gray-50">
+          <td class="p-3"><img src="${p.image}" class="w-10 h-10 object-cover rounded-xl shadow"></td>
+          <td class="p-3 font-bold text-gray-900">${p.name}</td>
+          <td class="p-3 uppercase font-semibold text-emerald-700">${p.category}</td>
+          <td class="p-3 font-bold">${p.basePrice.toLocaleString('vi-VN')} VNĐ</td>
+          <td class="p-3 text-center">
+            <button onclick="deleteProduct(${p.id})" class="text-red-500 hover:text-red-700 font-bold">Xóa</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function updateOrderStatus(index, status) {
+      let orders = JSON.parse(localStorage.getItem('adminOrders')) || [];
+      orders[index].status = status;
+      localStorage.setItem('adminOrders', JSON.stringify(orders));
+      renderAdminDashboard();
+    }
+
+    function addNewProduct(e) {
+      e.preventDefault();
+      const newProd = {
+        id: Date.now(),
+        name: document.getElementById('new-name').value,
+        category: document.getElementById('new-category').value,
+        basePrice: parseInt(document.getElementById('new-price').value),
+        image: document.getElementById('new-image').value,
+        desc: document.getElementById('new-desc').value
+      };
+
+      products.push(newProd);
+      localStorage.setItem('products', JSON.stringify(products));
+      alert('Thêm sản phẩm thành công!');
+      renderAdminDashboard();
+      e.target.reset();
+    }
+
+    function deleteProduct(id) {
+      products = products.filter(p => p.id !== id);
+      localStorage.setItem('products', JSON.stringify(products));
+      renderAdminDashboard();
+    }
+
+    function deleteOrder(index) {
+      let orders = JSON.parse(localStorage.getItem('adminOrders')) || [];
+      orders.splice(index, 1);
+      localStorage.setItem('adminOrders', JSON.stringify(orders));
+      renderAdminDashboard();
+    }
+
+    function clearAllOrders() {
+      if (confirm('Bạn có chắc chắn muốn xóa tất cả đơn hàng không?')) {
+        localStorage.removeItem('adminOrders');
+        renderAdminDashboard();
+      }
+    }
+
+    renderAdminDashboard();
+  </script>
+</body>
+</html>
